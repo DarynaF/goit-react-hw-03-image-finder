@@ -1,36 +1,54 @@
 import { Component } from 'react';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
+
 import css from './searchbar.module.css';
+
 class Searchbar extends Component {
   state = {
-    searchValue: '',
+    search: '',
   };
 
-  handleChange = event => {
-    this.setState({ searchValue: event.target.value });
+  handleChange = ({ target }) => {
+    const { name, value } = target;
+    this.setState({ [name]: value });
   };
 
-  handleSubmit = event => {
-    event.preventDefault();
-    this.props.onSubmit(this.state.searchValue);
+  handleSubmit = e => {
+    e.preventDefault();
+
+    const { onSubmit } = this.props;
+
+    onSubmit({ ...this.state });
+    this.reset();
   };
+
+  reset() {
+    this.setState({
+      search: '',
+    });
+  }
 
   render() {
+    const { search } = this.state;
+    const { handleChange, handleSubmit } = this;
+
     return (
       <header className={css.Searchbar}>
-        <form className={css.SearchForm} onSubmit={this.handleSubmit}>
-          <button type="submit" className={css.SearchFormButton}>
-            <span className={css.SearchFormButtonLabel}></span>
+        <form className={css.SearchForm} onSubmit={handleSubmit}>
+          <button type="submit" className={css.button}>
+            <span className={css.label}>Search</span>
           </button>
+
           <input
+            className={css.input}
             name="search"
-            className={css.SearchFormInput}
             type="text"
+            value={search}
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
-            value={this.state.searchValue}
-            onChange={this.handleChange}
+            onChange={handleChange}
+            required
           />
         </form>
       </header>
@@ -38,8 +56,9 @@ class Searchbar extends Component {
   }
 }
 
+export default Searchbar;
+
 Searchbar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-};
 
-export default Searchbar;
+};

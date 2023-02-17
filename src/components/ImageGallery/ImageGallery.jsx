@@ -1,33 +1,42 @@
-import { Component } from 'react';
-import ImageGalleryItem from 'components/ImageGallery/ImageGalleryItem';
-import { PropTypes } from 'prop-types';
+import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
+
+import PropTypes from 'prop-types';
+
 import css from './imageGallery.module.css';
 
-class ImageGallery extends Component {
-  render() {
-    return (
-      <ul className={css.ImageGallery}>
-        {this.props.images.map(image => (
+const ImageGallery = ({ pictures, showPicture }) => {
+  return (
+    <ul className={css.gallery}>
+      {pictures.map(({ id, webformatURL, largeImageURL, tags }) => {
+        return (
           <ImageGalleryItem
-            key={image.id}
-            onImgClick={this.props.onModalOpen}
-            image={image}
+            key={id}
+            id={id}
+            webformatURL={webformatURL}
+            largeImageURL={largeImageURL}
+            tags={tags}
+            showPicture={showPicture}
           />
-        ))}
-      </ul>
-    );
-  }
-}
-
-ImageGallery.propTypes = {
-  images: PropTypes.arrayOf(
-    PropTypes.shape({
-      //id: PropTypes.string.isRequired,
-      webformatURL: PropTypes.string.isRequired,
-      largeImageURL: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  onModalOpen: PropTypes.func.isRequired,
+        );
+      })}
+    </ul>
+  );
 };
 
 export default ImageGallery;
+
+ImageGallery.defaultProps = {
+  pictures: [],
+};
+
+ImageGallery.propTypes = {
+  showPicture: PropTypes.func.isRequired,
+  pictures: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      webformatURL: PropTypes.string.isRequired,
+      largeImageURL: PropTypes.string.isRequired,
+      tags: PropTypes.string.isRequired,
+    })
+  ),
+};
