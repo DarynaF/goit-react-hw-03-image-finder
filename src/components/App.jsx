@@ -77,7 +77,7 @@ class App extends Component {
       <div className={css.App}>
         <Searchbar onSubmit={searchPictures} />
         {!search && (
-          <p className={css.requestMassage}>Please enter a request</p>
+          <p className={css.requestMassage}>Please, type something to start...</p>
         )}
         {error && <p className={css.errorMassage}>{error}</p>}
         {loading && <Loader />}
